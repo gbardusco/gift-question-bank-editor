@@ -31,4 +31,14 @@ export interface QuestionStore {
   questions: Question[];
 }
 
+export interface BankMetadata {
+  id: string;
+  name: string;
+}
+
+export interface BankRegistry {
+  banks: BankMetadata[];
+  activeBankId: string;
+}
+
 export type Theme = 'light' | 'dark';

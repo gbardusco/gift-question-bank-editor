@@ -1,7 +1,8 @@
 
 import React from 'react';
 
-export const APP_STORAGE_KEY = 'moodle_gift_manager_data';
+export const APP_REGISTRY_KEY = 'moodle_gift_manager_registry';
+export const BANK_STORAGE_PREFIX = 'moodle_gift_bank_';
 
 export const DEFAULT_CATEGORY_PATH = 'top/PADRÃO PARA O EAD';
 
@@ -18,4 +19,6 @@ export const Icons = {
   Download: () => <i className="fa-solid fa-download"></i>,
   Save: () => <i className="fa-solid fa-floppy-disk"></i>,
   ArrowLeft: () => <i className="fa-solid fa-arrow-left"></i>,
+  Bank: () => <i className="fa-solid fa-database"></i>,
+  Layers: () => <i className="fa-solid fa-layer-group"></i>,
 };

@@ -1,15 +1,71 @@
 
-import { useState, useEffect, useCallback } from 'react';
-import { QuestionStore, Category, Question } from '../types';
-import { loadFromLocalStorage, saveToLocalStorage } from '../services/storageService';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { QuestionStore, Category, Question, BankRegistry, BankMetadata } from '../types';
+import { loadRegistry, saveRegistry, loadBankData, saveBankData, deleteBankData } from '../services/storageService';
 
 export const useQuestionStore = () => {
-  const [store, setStore] = useState<QuestionStore>(loadFromLocalStorage());
+  const [registry, setRegistry] = useState<BankRegistry>(loadRegistry());
+  const [store, setStore] = useState<QuestionStore>(() => loadBankData(registry.activeBankId));
 
+  // Sync registry to disk
   useEffect(() => {
-    saveToLocalStorage(store);
-  }, [store]);
+    saveRegistry(registry);
+  }, [registry]);
 
+  // Sync store to disk for current active bank
+  useEffect(() => {
+    saveBankData(registry.activeBankId, store);
+  }, [store, registry.activeBankId]);
+
+  // Switch bank
+  const switchBank = useCallback((bankId: string) => {
+    if (bankId === registry.activeBankId) return;
+    setRegistry(prev => ({ ...prev, activeBankId: bankId }));
+    setStore(loadBankData(bankId));
+  }, [registry.activeBankId]);
+
+  // Create bank
+  const createBank = useCallback((name: string) => {
+    const newBankId = `bank_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`;
+    const newBank: BankMetadata = { id: newBankId, name };
+    
+    setRegistry(prev => ({
+      ...prev,
+      banks: [...prev.banks, newBank]
+    }));
+    
+    // Switch to the new bank automatically
+    switchBank(newBankId);
+  }, [switchBank]);
+
+  // Rename bank
+  const renameBank = useCallback((bankId: string, newName: string) => {
+    setRegistry(prev => ({
+      ...prev,
+      banks: prev.banks.map(b => b.id === bankId ? { ...b, name: newName } : b)
+    }));
+  }, []);
+
+  // Delete bank
+  const deleteBank = useCallback((bankId: string) => {
+    if (registry.banks.length <= 1) return; // Prevent deleting last bank
+
+    const isDeletingActive = bankId === registry.activeBankId;
+    const remainingBanks = registry.banks.filter(b => b.id !== bankId);
+    const newActiveId = isDeletingActive ? remainingBanks[0].id : registry.activeBankId;
+
+    deleteBankData(bankId);
+    setRegistry({
+      banks: remainingBanks,
+      activeBankId: newActiveId
+    });
+
+    if (isDeletingActive) {
+      setStore(loadBankData(newActiveId));
+    }
+  }, [registry.activeBankId, registry.banks]);
+
+  // Existing store operations (updated to use current state)
   const addCategory = useCallback((name: string, parentId: string | null) => {
     const newCat: Category = { 
       id: `cat_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`, 
@@ -43,12 +99,25 @@ export const useQuestionStore = () => {
     return idsToDelete;
   }, [store.categories]);
 
+  const isDescendant = useCallback((parentSearchId: string, potentialChildId: string | null): boolean => {
+    if (!potentialChildId) return false;
+    let current = store.categories.find(c => c.id === potentialChildId);
+    while (current && current.parentId) {
+      if (current.parentId === parentSearchId) return true;
+      current = store.categories.find(c => c.id === current.parentId);
+    }
+    return false;
+  }, [store.categories]);
+
   const moveCategory = useCallback((id: string, newParentId: string | null) => {
+    if (id === newParentId) return;
+    if (isDescendant(id, newParentId)) return;
+
     setStore(prev => ({
       ...prev,
       categories: prev.categories.map(c => c.id === id ? { ...c, parentId: newParentId } : c)
     }));
-  }, []);
+  }, [isDescendant]);
 
   const saveQuestion = useCallback((data: Partial<Question>, currentId?: string) => {
     if (currentId) {
@@ -85,7 +154,12 @@ export const useQuestionStore = () => {
   }, []);
 
   return {
+    registry,
     store,
+    switchBank,
+    createBank,
+    renameBank,
+    deleteBank,
     addCategory,
     editCategory,
     deleteCategory,

@@ -1,49 +1,47 @@
 # Moodle GIFT Manager
 
-Uma aplicação web profissional e de alta performance projetada para educadores e designers instrucionais gerenciarem bancos de questões complexos no formato GIFT (General Import Format Technology) do Moodle.
+Uma aplicação web profissional e intuitiva projetada para educadores e designers instrucionais gerenciarem bancos de questões no formato GIFT (General Import Format Technology) do Moodle com máxima eficiência.
 
 ## 🚀 Principais Funcionalidades
 
-- **Organização Hierárquica**: Crie níveis infinitos de categorias e subcategorias para manter suas questões organizadas.
-- **Simulador de Questões Moodle**: Visualize como suas questões aparecerão no ambiente real do Moodle através de um simulador integrado que mimetiza o layout clássico da plataforma.
-- **Editor de Texto Rico (WYSIWYG)**: Suporte completo para formatação de texto (negrito, listas, alinhamento) tanto no enunciado quanto nas alternativas.
-- **Drag & Drop Nativo**:
-  - Reorganize categorias arrastando-as umas para as outras na sidebar.
-  - Mova questões entre pastas instantaneamente arrastando os cards do dashboard para a árvore lateral.
-- **Dashboard Interativo**: Fluxo de trabalho otimizado onde clicar em qualquer card de questão abre instantaneamente o modo de edição.
-- **Importação/Exportação Inteligente**:
-  - **Importar**: Cole arquivos GIFT existentes para reconstruir automaticamente a árvore de categorias e questões.
-  - **Exportar**: Baixe o banco completo ou categorias específicas formatadas perfeitamente para o Moodle.
-- **Privacidade e Persistência**: Todos os dados são salvos localmente no seu navegador (LocalStorage). Nenhum dado sai da sua máquina a menos que você escolha exportar.
+- **Organização Hierárquica Multinível**: Crie uma árvore complexa de categorias e subcategorias para organizar seus repositórios de questões.
+- **Simulador de Questões Moodle**: Visualize instantaneamente como suas questões aparecerão para os alunos. O simulador mimetiza fielmente o layout, as cores e o comportamento do ambiente Moodle.
+- **Edição Direta e Fluida**:
+  - No Dashboard, basta clicar em qualquer card de questão para entrar no modo de edição.
+  - Interface limpa que prioriza o conteúdo e a velocidade de navegação.
+- **Editor de Texto Rico (WYSIWYG)**: Formate enunciados e alternativas com negrito, itálico, listas e alinhamentos que persistem na exportação.
+- **Sistema de Drag & Drop Inteligente**:
+  - Arraste categorias para reorganizar a hierarquia na barra lateral.
+  - Mova questões entre categorias arrastando os cards do painel central diretamente para as pastas na barra lateral.
+- **Importação e Exportação Poderosas**:
+  - **Importar**: Converta arquivos GIFT existentes em uma estrutura editável instantaneamente.
+  - **Exportar**: Gere arquivos GIFT padronizados do banco completo ou de categorias específicas.
+- **Privacidade Total**: Seus dados são armazenados localmente no navegador (LocalStorage). Nenhuma informação é enviada para servidores externos.
 
 ## 📖 Como Usar
 
-### 1. Gerenciando Categorias
-- Use o botão **"+ Root"** para criar categorias de nível superior.
-- Passe o mouse sobre qualquer categoria na sidebar para ver opções de adicionar subcategorias, editar nomes ou excluir.
-- **Mover**: Clique e segure uma categoria para movê-la para dentro de outra.
+### 1. Estrutura de Categorias
+- Utilize o botão **"+ Root"** na barra lateral para criar categorias principais.
+- Use os ícones de ação ao passar o mouse sobre as categorias para adicionar subníveis ou editar.
+- Reorganize sua árvore arrastando uma categoria para dentro de outra.
 
-### 2. Criando e Editando Questões
-- Selecione uma categoria na sidebar para ver suas questões.
-- Clique em **"Nova Questão"** no cabeçalho ou **clique diretamente em um card** no dashboard para editar uma questão existente.
-- Para Múltipla Escolha, defina a alternativa correta usando o botão de rádio.
+### 2. Gestão de Questões
+- **Criar**: Clique em "Nova Questão" após selecionar uma categoria.
+- **Editar**: Clique em qualquer card de questão no painel central ou use o ícone de edição.
+- **Mover**: Arraste uma questão do painel central para uma pasta na barra lateral para mudar sua categoria.
 
-### 3. Simulador Moodle (Preview)
-- Na árvore lateral (sidebar), clique no ícone de **Lupa** ao lado do nome de uma questão para abrir o simulador.
-- Isso permite verificar se a formatação e as alternativas estão visualmente corretas antes de levar o arquivo para o Moodle.
+### 3. Simulador (Preview)
+- Clique no ícone da **Lupa** (presente tanto nos cards quanto na barra lateral) para abrir o Simulador Moodle.
+- Verifique se a formatação e as opções de múltipla escolha estão corretas antes de importar para o Moodle.
 
-### 4. Organizando com Drag & Drop
-- Você pode mover questões entre categorias sem abrir o formulário. Basta arrastar o card da questão no painel principal e soltá-lo sobre a pasta de destino na sidebar.
+### 4. Importar Dados Existentes
+- Clique em **"Importar GIFT"** na base da barra lateral e cole o conteúdo do seu arquivo. O sistema processará as marcas `$CATEGORY` e criará a estrutura automaticamente.
 
-### 5. Importação e Exportação
-- **Importar**: Clique em "Importar GIFT" no rodapé da sidebar e cole o conteúdo do seu arquivo `.txt` ou `.gift`.
-- **Exportar**: Use o botão no rodapé da sidebar para baixar todo o repositório organizado.
-
-## 🛠 Tecnologias
-- **React 19**
-- **Tailwind CSS** (Design Responsivo e Dark Mode)
-- **FontAwesome 6** (Iconografia)
-- **Local Storage API** (Persistência de dados)
+## 🛠 Tecnologias Utilizadas
+- **React 19**: Framework de UI moderno e performante.
+- **Tailwind CSS**: Estilização responsiva com suporte completo a Modo Escuro (Dark Mode).
+- **Lucide/FontAwesome**: Iconografia clara e funcional.
+- **GIFT Parser Customizado**: Lógica robusta para processamento de metadados e categorias.
 
 ## 📄 Licença
-Este projeto é de código aberto e disponível para uso educacional e profissional.
+Desenvolvido para a comunidade educacional. Livre para uso, modificação e distribuição.
