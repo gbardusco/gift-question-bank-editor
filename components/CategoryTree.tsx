@@ -10,6 +10,8 @@ interface CategoryTreeProps {
   onToggleExpand: (id: string) => void;
   onSelectCategory: (id: string) => void;
   onSelectQuestion: (question: Question) => void;
+  onDuplicateQuestion: (id: string) => void;
+  onDeleteQuestion: (id: string) => void;
   onPreviewQuestion: (question: Question) => void;
   onAddSubcategory: (parentId: string) => void;
   onEditCategory: (id: string) => void;
@@ -28,6 +30,8 @@ const CategoryNode: React.FC<{
   onToggleExpand: (id: string) => void;
   onSelectCategory: (id: string) => void;
   onSelectQuestion: (question: Question) => void;
+  onDuplicateQuestion: (id: string) => void;
+  onDeleteQuestion: (id: string) => void;
   onPreviewQuestion: (question: Question) => void;
   onAddSubcategory: (parentId: string) => void;
   onEditCategory: (id: string) => void;
@@ -35,7 +39,7 @@ const CategoryNode: React.FC<{
   onMoveCategory: (id: string, newParentId: string | null) => void;
   onMoveQuestion: (questionId: string, newCategoryId: string) => void;
 }> = ({ 
-  category, categories, questions, depth, selectedCategoryId, expandedIds, onToggleExpand, onSelectCategory, onSelectQuestion, onPreviewQuestion,
+  category, categories, questions, depth, selectedCategoryId, expandedIds, onToggleExpand, onSelectCategory, onSelectQuestion, onDuplicateQuestion, onDeleteQuestion, onPreviewQuestion,
   onAddSubcategory, onEditCategory, onDeleteCategory, onMoveCategory, onMoveQuestion
 }) => {
   const [isDragOver, setIsDragOver] = useState(false);
@@ -78,7 +82,7 @@ const CategoryNode: React.FC<{
   return (
     <div className="flex flex-col">
       <div 
-        draggable={category.id !== 'root'}
+        draggable={true}
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -109,9 +113,7 @@ const CategoryNode: React.FC<{
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <button onClick={(e) => { e.stopPropagation(); onAddSubcategory(category.id); }} className={`p-1 rounded-lg ${isSelected ? 'hover:bg-indigo-500' : 'hover:bg-white dark:hover:bg-slate-700'}`} title="Nova Subcategoria"><Icons.Plus /></button>
           <button onClick={(e) => { e.stopPropagation(); onEditCategory(category.id); }} className={`p-1 rounded-lg ${isSelected ? 'hover:bg-indigo-500' : 'hover:bg-white dark:hover:bg-slate-700'}`} title="Editar"><Icons.Edit /></button>
-          {category.id !== 'root' && (
-            <button onClick={(e) => { e.stopPropagation(); onDeleteCategory(category.id); }} className={`p-1 rounded-lg ${isSelected ? 'hover:bg-indigo-500' : 'hover:bg-white dark:hover:bg-slate-700 hover:text-red-500'}`} title="Excluir"><Icons.Trash /></button>
-          )}
+          <button onClick={(e) => { e.stopPropagation(); onDeleteCategory(category.id); }} className={`p-1 rounded-lg ${isSelected ? 'hover:bg-indigo-500' : 'hover:bg-white dark:hover:bg-slate-700 hover:text-red-500'}`} title="Excluir"><Icons.Trash /></button>
         </div>
       </div>
       
@@ -121,7 +123,7 @@ const CategoryNode: React.FC<{
             <CategoryNode 
               key={child.id} category={child} categories={categories} questions={questions} depth={depth + 1} selectedCategoryId={selectedCategoryId} 
               expandedIds={expandedIds} onToggleExpand={onToggleExpand}
-              onSelectCategory={onSelectCategory} onSelectQuestion={onSelectQuestion} onPreviewQuestion={onPreviewQuestion} onAddSubcategory={onAddSubcategory} 
+              onSelectCategory={onSelectCategory} onSelectQuestion={onSelectQuestion} onDuplicateQuestion={onDuplicateQuestion} onDeleteQuestion={onDeleteQuestion} onPreviewQuestion={onPreviewQuestion} onAddSubcategory={onAddSubcategory} 
               onEditCategory={onEditCategory} onDeleteCategory={onDeleteCategory} onMoveCategory={onMoveCategory} onMoveQuestion={onMoveQuestion} 
             />
           ))}
@@ -141,13 +143,29 @@ const CategoryNode: React.FC<{
                 <span className="flex-shrink-0 opacity-70"><Icons.File /></span>
                 <span className="truncate text-xs text-slate-500 dark:text-slate-400 font-medium group-hover:text-indigo-500 transition-colors">{q.name}</span>
               </div>
-              <button 
-                onClick={(e) => { e.stopPropagation(); onPreviewQuestion(q); }}
-                className="p-1 opacity-0 group-hover:opacity-100 hover:text-indigo-600 transition-all"
-                title="Preview Moodle"
-              >
-                <Icons.Search />
-              </button>
+              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                <button 
+                  onClick={(e) => { e.stopPropagation(); onDuplicateQuestion(q.id); }}
+                  className="p-1 hover:text-emerald-500 transition-colors"
+                  title="Duplicar"
+                >
+                  <Icons.Copy />
+                </button>
+                <button 
+                  onClick={(e) => { e.stopPropagation(); onPreviewQuestion(q); }}
+                  className="p-1 hover:text-indigo-600 transition-colors"
+                  title="Preview Moodle"
+                >
+                  <Icons.Search />
+                </button>
+                <button 
+                  onClick={(e) => { e.stopPropagation(); onDeleteQuestion(q.id); }}
+                  className="p-1 hover:text-red-500 transition-colors"
+                  title="Excluir"
+                >
+                  <Icons.Trash />
+                </button>
+              </div>
             </div>
           ))}
         </div>

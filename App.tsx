@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Question, QuestionType, GIFTValidationError } from './types';
 import { useQuestionStore } from './hooks/useQuestionStore';
@@ -47,10 +46,10 @@ const App: React.FC = () => {
   const [previewModal, setPreviewModal] = useState<{ isOpen: boolean; question: Question | null }>({ isOpen: false, question: null });
 
   useEffect(() => {
-    setSelectedCategoryId(store.categories[0]?.id || 'root');
+    setSelectedCategoryId(store.categories[0]?.id || null);
     setIsEditingQuestion(false);
     setCurrentQuestion(undefined);
-  }, [registry.activeBankId, store.categories]);
+  }, [registry.activeBankId, store.categories.length === 0]);
 
   const validationResults = useMemo(() => validateGift(importText), [importText]);
   const errorCount = useMemo(() => validationResults.filter(v => v.severity === 'error').length, [validationResults]);
@@ -134,6 +133,23 @@ const App: React.FC = () => {
 
   const handleDuplicateQuestion = (id: string) => {
     duplicateQuestion(id);
+  };
+
+  const handleConfirmDeleteQuestion = (id: string) => {
+    const q = store.questions.find(x => x.id === id);
+    if (q) {
+      setConfirmModal({
+        isOpen: true,
+        title: 'Excluir Questão',
+        message: `Deseja excluir "${q.name}"?`,
+        confirmLabel: 'Excluir',
+        isDestructive: true,
+        onConfirm: () => {
+          deleteQuestion(id);
+          setConfirmModal(p => ({ ...p, isOpen: false }));
+        }
+      });
+    }
   };
 
   const handlePreviewQuestion = (q: Question) => {
@@ -256,10 +272,12 @@ const App: React.FC = () => {
                 onToggleExpand={handleToggleExpand}
                 onSelectCategory={(id) => { setSelectedCategoryId(id); setIsEditingQuestion(false); if (window.innerWidth < 1024) setIsSidebarOpen(false); }}
                 onSelectQuestion={handleSelectQuestion}
+                onDuplicateQuestion={handleDuplicateQuestion}
+                onDeleteQuestion={handleConfirmDeleteQuestion}
                 onPreviewQuestion={handlePreviewQuestion}
                 onAddSubcategory={(parentId) => setCatModal({ isOpen: true, mode: 'add', parentId, categoryId: null, name: '' })}
                 onEditCategory={(id) => { const c = store.categories.find(x => x.id === id); if (c) setCatModal({ isOpen: true, mode: 'edit', parentId: c.parentId, categoryId: id, name: c.name }); }}
-                onDeleteCategory={(id) => setConfirmModal({ isOpen: true, title: 'Excluir Categoria', message: 'Deseja excluir esta categoria?', confirmLabel: 'Excluir', isDestructive: true, onConfirm: () => { deleteCategory(id); if (selectedCategoryId === id) setSelectedCategoryId('root'); setConfirmModal(p => ({...p, isOpen: false})); }})}
+                onDeleteCategory={(id) => setConfirmModal({ isOpen: true, title: 'Excluir Categoria', message: 'Deseja excluir esta categoria e tudo que houver nela?', confirmLabel: 'Excluir', isDestructive: true, onConfirm: () => { deleteCategory(id); if (selectedCategoryId === id) setSelectedCategoryId(null); setConfirmModal(p => ({...p, isOpen: false})); }})}
                 onMoveCategory={moveCategory} 
                 onMoveQuestion={moveQuestion}
               />
@@ -271,7 +289,7 @@ const App: React.FC = () => {
               <i className="fas fa-file-import mr-2"></i>Importar GIFT
             </button>
             <button onClick={() => downloadFile(exportToGift(store.categories, store.questions, selectedCategoryId || undefined), `${selectedCategory?.name || 'banco'}.gift.txt`)} className="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-indigo-700 shadow-lg transition flex items-center justify-center gap-2">
-              <Icons.Download /> {selectedCategoryId === 'root' ? 'Exportar Banco' : 'Exportar Categoria'}
+              <Icons.Download /> {selectedCategoryId === null || selectedCategoryId === 'root' ? 'Exportar Banco' : 'Exportar Categoria'}
             </button>
           </div>
         </div>
@@ -349,7 +367,7 @@ const App: React.FC = () => {
                         <button onClick={(e) => { e.stopPropagation(); handleDuplicateQuestion(q.id); }} className="p-3 text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-xl" title="Duplicar"><Icons.Copy /></button>
                         <button onClick={(e) => { e.stopPropagation(); handlePreviewQuestion(q); }} className="p-3 text-slate-400 hover:text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-xl" title="Simular Moodle"><Icons.Search /></button>
                         <button onClick={(e) => { e.stopPropagation(); handleSelectQuestion(q); }} className="p-3 text-slate-400 hover:text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-xl"><Icons.Edit /></button>
-                        <button onClick={(e) => { e.stopPropagation(); setConfirmModal({ isOpen: true, title: 'Excluir Questão', message: `Deseja excluir "${q.name}"?`, confirmLabel: 'Excluir', isDestructive: true, onConfirm: () => { deleteQuestion(q.id); setConfirmModal(p => ({...p, isOpen: false})); }})}} className="p-3 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl"><Icons.Trash /></button>
+                        <button onClick={(e) => { e.stopPropagation(); handleConfirmDeleteQuestion(q.id); }} className="p-3 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl"><Icons.Trash /></button>
                       </div>
                     </div>
                   ))}

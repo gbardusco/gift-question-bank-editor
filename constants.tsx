@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export const APP_REGISTRY_KEY = 'moodle_gift_manager_registry';
@@ -24,4 +23,5 @@ export const Icons = {
   Copy: () => <i className="fa-solid fa-copy"></i>,
   ExpandAll: () => <i className="fa-solid fa-angles-down text-[10px]"></i>,
   CollapseAll: () => <i className="fa-solid fa-angles-up text-[10px]"></i>,
+  Sigma: () => <i className="fa-solid fa-square-root-variable"></i>,
 };
