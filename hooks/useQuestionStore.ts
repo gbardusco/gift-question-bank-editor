@@ -1,5 +1,4 @@
-
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { QuestionStore, Category, Question, BankRegistry, BankMetadata } from '../types';
 import { loadRegistry, saveRegistry, loadBankData, saveBankData, deleteBankData } from '../services/storageService';
 
@@ -7,38 +6,27 @@ export const useQuestionStore = () => {
   const [registry, setRegistry] = useState<BankRegistry>(loadRegistry());
   const [store, setStore] = useState<QuestionStore>(() => loadBankData(registry.activeBankId));
 
-  // Sync registry to disk
   useEffect(() => {
     saveRegistry(registry);
   }, [registry]);
 
-  // Sync store to disk for current active bank
   useEffect(() => {
     saveBankData(registry.activeBankId, store);
   }, [store, registry.activeBankId]);
 
-  // Switch bank
   const switchBank = useCallback((bankId: string) => {
     if (bankId === registry.activeBankId) return;
     setRegistry(prev => ({ ...prev, activeBankId: bankId }));
     setStore(loadBankData(bankId));
   }, [registry.activeBankId]);
 
-  // Create bank
   const createBank = useCallback((name: string) => {
     const newBankId = `bank_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`;
     const newBank: BankMetadata = { id: newBankId, name };
-    
-    setRegistry(prev => ({
-      ...prev,
-      banks: [...prev.banks, newBank]
-    }));
-    
-    // Switch to the new bank automatically
+    setRegistry(prev => ({ ...prev, banks: [...prev.banks, newBank] }));
     switchBank(newBankId);
   }, [switchBank]);
 
-  // Rename bank
   const renameBank = useCallback((bankId: string, newName: string) => {
     setRegistry(prev => ({
       ...prev,
@@ -46,33 +34,25 @@ export const useQuestionStore = () => {
     }));
   }, []);
 
-  // Delete bank
   const deleteBank = useCallback((bankId: string) => {
-    if (registry.banks.length <= 1) return; // Prevent deleting last bank
-
+    if (registry.banks.length <= 1) return;
     const isDeletingActive = bankId === registry.activeBankId;
     const remainingBanks = registry.banks.filter(b => b.id !== bankId);
     const newActiveId = isDeletingActive ? remainingBanks[0].id : registry.activeBankId;
-
     deleteBankData(bankId);
-    setRegistry({
-      banks: remainingBanks,
-      activeBankId: newActiveId
-    });
-
-    if (isDeletingActive) {
-      setStore(loadBankData(newActiveId));
-    }
+    setRegistry({ banks: remainingBanks, activeBankId: newActiveId });
+    if (isDeletingActive) setStore(loadBankData(newActiveId));
   }, [registry.activeBankId, registry.banks]);
 
-  // Existing store operations (updated to use current state)
   const addCategory = useCallback((name: string, parentId: string | null) => {
+    const newCatId = `cat_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`;
     const newCat: Category = { 
-      id: `cat_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`, 
+      id: newCatId, 
       name, 
       parentId 
     };
     setStore(prev => ({ ...prev, categories: [...prev.categories, newCat] }));
+    return newCatId;
   }, []);
 
   const editCategory = useCallback((id: string, name: string) => {
@@ -91,7 +71,6 @@ export const useQuestionStore = () => {
       });
     };
     findDescendants(id);
-
     setStore(prev => ({
       categories: prev.categories.filter(c => !idsToDelete.includes(c.id)),
       questions: prev.questions.filter(q => !idsToDelete.includes(q.categoryId))
@@ -112,7 +91,6 @@ export const useQuestionStore = () => {
   const moveCategory = useCallback((id: string, newParentId: string | null) => {
     if (id === newParentId) return;
     if (isDescendant(id, newParentId)) return;
-
     setStore(prev => ({
       ...prev,
       categories: prev.categories.map(c => c.id === id ? { ...c, parentId: newParentId } : c)
@@ -135,6 +113,18 @@ export const useQuestionStore = () => {
     }
   }, []);
 
+  const duplicateQuestion = useCallback((id: string) => {
+    const original = store.questions.find(q => q.id === id);
+    if (!original) return;
+    const copy: Question = {
+      ...original,
+      id: `q_copy_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+      name: `${original.name} (Cópia)`,
+      createdAt: Date.now()
+    };
+    setStore(prev => ({ ...prev, questions: [...prev.questions, copy] }));
+  }, [store.questions]);
+
   const deleteQuestion = useCallback((id: string) => {
     setStore(prev => ({ ...prev, questions: prev.questions.filter(q => q.id !== id) }));
   }, []);
@@ -147,10 +137,14 @@ export const useQuestionStore = () => {
   }, []);
 
   const bulkImport = useCallback((categories: Category[], questions: Question[]) => {
-    setStore(prev => ({
-      categories: [...prev.categories, ...categories.filter(c => !prev.categories.some(pc => pc.id === c.id))],
-      questions: [...prev.questions, ...questions]
-    }));
+    setStore(prev => {
+      // Avoid duplicated categories by ID or by Name-Parent path if necessary
+      const newCategories = categories.filter(c => !prev.categories.some(pc => pc.id === c.id));
+      return {
+        categories: [...prev.categories, ...newCategories],
+        questions: [...prev.questions, ...questions]
+      };
+    });
   }, []);
 
   return {
@@ -165,6 +159,7 @@ export const useQuestionStore = () => {
     deleteCategory,
     moveCategory,
     saveQuestion,
+    duplicateQuestion,
     deleteQuestion,
     moveQuestion,
     bulkImport

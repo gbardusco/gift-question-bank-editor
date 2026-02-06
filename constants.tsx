@@ -21,4 +21,7 @@ export const Icons = {
   ArrowLeft: () => <i className="fa-solid fa-arrow-left"></i>,
   Bank: () => <i className="fa-solid fa-database"></i>,
   Layers: () => <i className="fa-solid fa-layer-group"></i>,
+  Copy: () => <i className="fa-solid fa-copy"></i>,
+  ExpandAll: () => <i className="fa-solid fa-angles-down text-[10px]"></i>,
+  CollapseAll: () => <i className="fa-solid fa-angles-up text-[10px]"></i>,
 };

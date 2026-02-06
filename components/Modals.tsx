@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Icons } from '../constants';
 import { Question, QuestionType } from '../types';
 
@@ -26,6 +25,22 @@ export const PreviewModal: React.FC<{
   question: Question | null; 
   onClose: () => void;
 }> = ({ isOpen, question, onClose }) => {
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isOpen && contentRef.current && (window as any).renderMathInElement) {
+      (window as any).renderMathInElement(contentRef.current, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false},
+          {left: '\\(', right: '\\)', display: false},
+          {left: '\\[', right: '\\]', display: true}
+        ],
+        throwOnError: false
+      });
+    }
+  }, [isOpen, question]);
+
   if (!question) return null;
 
   return (
@@ -37,7 +52,7 @@ export const PreviewModal: React.FC<{
         <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-2"><i className="fas fa-times text-xl"></i></button>
       </div>
 
-      <div className="flex-1 overflow-y-auto pr-2 scrollbar-thin space-y-6">
+      <div className="flex-1 overflow-y-auto pr-2 scrollbar-thin space-y-6" ref={contentRef}>
         {/* Moodle Style Question Layout */}
         <div className="flex flex-col lg:flex-row gap-0 border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden shadow-sm">
           {/* Question Meta Sidebar (Moodle Style) */}

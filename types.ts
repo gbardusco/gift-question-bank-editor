@@ -42,3 +42,12 @@ export interface BankRegistry {
 }
 
 export type Theme = 'light' | 'dark';
+
+export type ValidationSeverity = 'error' | 'warning';
+
+export interface GIFTValidationError {
+  line: number;
+  message: string;
+  severity: ValidationSeverity;
+  text: string;
+}

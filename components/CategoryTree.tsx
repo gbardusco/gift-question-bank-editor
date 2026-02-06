@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Category, Question } from '../types';
 import { Icons } from '../constants';
 
@@ -7,6 +6,8 @@ interface CategoryTreeProps {
   categories: Category[];
   questions: Question[];
   selectedCategoryId: string | null;
+  expandedIds: Set<string>;
+  onToggleExpand: (id: string) => void;
   onSelectCategory: (id: string) => void;
   onSelectQuestion: (question: Question) => void;
   onPreviewQuestion: (question: Question) => void;
@@ -23,6 +24,8 @@ const CategoryNode: React.FC<{
   questions: Question[];
   depth: number;
   selectedCategoryId: string | null;
+  expandedIds: Set<string>;
+  onToggleExpand: (id: string) => void;
   onSelectCategory: (id: string) => void;
   onSelectQuestion: (question: Question) => void;
   onPreviewQuestion: (question: Question) => void;
@@ -32,11 +35,11 @@ const CategoryNode: React.FC<{
   onMoveCategory: (id: string, newParentId: string | null) => void;
   onMoveQuestion: (questionId: string, newCategoryId: string) => void;
 }> = ({ 
-  category, categories, questions, depth, selectedCategoryId, onSelectCategory, onSelectQuestion, onPreviewQuestion,
+  category, categories, questions, depth, selectedCategoryId, expandedIds, onToggleExpand, onSelectCategory, onSelectQuestion, onPreviewQuestion,
   onAddSubcategory, onEditCategory, onDeleteCategory, onMoveCategory, onMoveQuestion
 }) => {
-  const [isOpen, setIsOpen] = useState(true);
   const [isDragOver, setIsDragOver] = useState(false);
+  const isOpen = expandedIds.has(category.id);
   
   const childCategories = categories.filter(c => c.parentId === category.id);
   const categoryQuestions = questions.filter(q => q.categoryId === category.id);
@@ -92,7 +95,7 @@ const CategoryNode: React.FC<{
       >
         <div className="flex items-center gap-2 overflow-hidden pointer-events-none">
           <button 
-            onClick={(e) => { e.stopPropagation(); setIsOpen(!isOpen); }} 
+            onClick={(e) => { e.stopPropagation(); onToggleExpand(category.id); }} 
             className={`transition-transform duration-200 pointer-events-auto p-1 hover:bg-black/5 dark:hover:bg-white/5 rounded ${isOpen ? '' : '-rotate-90'} ${(childCategories.length === 0 && categoryQuestions.length === 0) ? 'invisible' : ''}`}
           >
             <Icons.ChevronDown />
@@ -117,6 +120,7 @@ const CategoryNode: React.FC<{
           {childCategories.map(child => (
             <CategoryNode 
               key={child.id} category={child} categories={categories} questions={questions} depth={depth + 1} selectedCategoryId={selectedCategoryId} 
+              expandedIds={expandedIds} onToggleExpand={onToggleExpand}
               onSelectCategory={onSelectCategory} onSelectQuestion={onSelectQuestion} onPreviewQuestion={onPreviewQuestion} onAddSubcategory={onAddSubcategory} 
               onEditCategory={onEditCategory} onDeleteCategory={onDeleteCategory} onMoveCategory={onMoveCategory} onMoveQuestion={onMoveQuestion} 
             />
