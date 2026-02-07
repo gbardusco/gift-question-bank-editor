@@ -1,0 +1,5 @@
+{
+  "name": "Moodle GIFT Manager",
+  "description": "A comprehensive system for managing multilevel question categories and exporting them in the Moodle GIFT format, featuring rich text support and hierarchical organization.",
+  "requestFramePermissions": []
+}
