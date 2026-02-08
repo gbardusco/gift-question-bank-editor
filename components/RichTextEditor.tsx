@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
+import Document from '@tiptap/extension-document';
+import Paragraph from '@tiptap/extension-paragraph';
+import Text from '@tiptap/extension-text';
+import Bold from '@tiptap/extension-bold';
+import Italic from '@tiptap/extension-italic';
+import Heading from '@tiptap/extension-heading';
+import BulletList from '@tiptap/extension-bullet-list';
+import OrderedList from '@tiptap/extension-ordered-list';
+import ListItem from '@tiptap/extension-list-item';
 import Underline from '@tiptap/extension-underline';
 import Table from '@tiptap/extension-table';
 import TableRow from '@tiptap/extension-table-row';
@@ -22,11 +30,17 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, label 
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      Document,
+      Paragraph,
+      Text,
+      Bold,
+      Italic,
       Underline,
-      Image.configure({
-        allowBase64: true,
-      }),
+      Heading.configure({ levels: [1, 2, 3] }),
+      BulletList,
+      OrderedList,
+      ListItem,
+      Image.configure({ allowBase64: true }),
       (Table as any).configure({ resizable: true }),
       TableRow,
       TableHeader,
@@ -60,7 +74,6 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, label 
   };
 
   const handleInsertLaTeX = (latex: string) => {
-    // Standard Moodle-compatible LaTeX delimiters
     const content = ` $$ ${latex} $$ `;
     editor.chain().focus().insertContent(content).run();
   };
