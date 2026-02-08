@@ -1,12 +1,12 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { Question, QuestionType, GIFTValidationError } from './types';
-import { useQuestionStore } from './hooks/useQuestionStore';
-import { useTheme } from './hooks/useTheme';
-import { exportToGift, parseGift, downloadFile, validateGift } from './services/giftExporter';
-import CategoryTree from './components/CategoryTree';
-import QuestionForm from './components/QuestionForm';
-import { Icons } from './constants';
-import { ConfirmModal, CategoryModal, PreviewModal } from './components/Modals';
+import { Question, QuestionType, GIFTValidationError } from './types.ts';
+import { useQuestionStore } from './hooks/useQuestionStore.ts';
+import { useTheme } from './hooks/useTheme.ts';
+import { exportToGift, parseGift, downloadFile, validateGift } from './services/giftExporter.ts';
+import CategoryTree from './components/CategoryTree.tsx';
+import QuestionForm from './components/QuestionForm.tsx';
+import { Icons } from './constants.tsx';
+import { ConfirmModal, CategoryModal, PreviewModal } from './components/Modals.tsx';
 
 const App: React.FC = () => {
   const { 

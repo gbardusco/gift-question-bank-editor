@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Category, Question } from '../types';
-import { Icons } from '../constants';
+import React, { useState } from 'react';
+import { Category, Question } from '../types.ts';
+import { Icons } from '../constants.tsx';
 
 interface CategoryTreeProps {
   categories: Category[];
@@ -102,18 +102,18 @@ const CategoryNode: React.FC<{
             onClick={(e) => { e.stopPropagation(); onToggleExpand(category.id); }} 
             className={`transition-transform duration-200 pointer-events-auto p-1 hover:bg-black/5 dark:hover:bg-white/5 rounded ${isOpen ? '' : '-rotate-90'} ${(childCategories.length === 0 && categoryQuestions.length === 0) ? 'invisible' : ''}`}
           >
-            <Icons.ChevronDown />
+            <Icons.ChevronDown aria-hidden="true" />
           </button>
           <span className="flex-shrink-0">
-            {isSelected ? <i className="fa-solid fa-folder-open text-white"></i> : (isOpen ? <Icons.FolderOpen /> : <Icons.Folder />)}
+            {isSelected ? <i className="fa-solid fa-folder-open text-white" aria-hidden="true"></i> : (isOpen ? <Icons.FolderOpen aria-hidden="true" /> : <Icons.Folder aria-hidden="true" />)}
           </span>
           <span className="truncate text-sm font-bold tracking-tight">{category.name}</span>
         </div>
         
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button onClick={(e) => { e.stopPropagation(); onAddSubcategory(category.id); }} className={`p-1 rounded-lg ${isSelected ? 'hover:bg-indigo-500' : 'hover:bg-white dark:hover:bg-slate-700'}`} title="Nova Subcategoria"><Icons.Plus /></button>
-          <button onClick={(e) => { e.stopPropagation(); onEditCategory(category.id); }} className={`p-1 rounded-lg ${isSelected ? 'hover:bg-indigo-500' : 'hover:bg-white dark:hover:bg-slate-700'}`} title="Editar"><Icons.Edit /></button>
-          <button onClick={(e) => { e.stopPropagation(); onDeleteCategory(category.id); }} className={`p-1 rounded-lg ${isSelected ? 'hover:bg-indigo-500' : 'hover:bg-white dark:hover:bg-slate-700 hover:text-red-500'}`} title="Excluir"><Icons.Trash /></button>
+          <button onClick={(e) => { e.stopPropagation(); onAddSubcategory(category.id); }} className={`p-1 rounded-lg ${isSelected ? 'hover:bg-indigo-500' : 'hover:bg-white dark:hover:bg-slate-700'}`} title="Nova Subcategoria" aria-label="Adicionar subcategoria"><Icons.Plus aria-hidden="true" /></button>
+          <button onClick={(e) => { e.stopPropagation(); onEditCategory(category.id); }} className={`p-1 rounded-lg ${isSelected ? 'hover:bg-indigo-500' : 'hover:bg-white dark:hover:bg-slate-700'}`} title="Editar" aria-label="Editar categoria"><Icons.Edit aria-hidden="true" /></button>
+          <button onClick={(e) => { e.stopPropagation(); onDeleteCategory(category.id); }} className={`p-1 rounded-lg ${isSelected ? 'hover:bg-indigo-500' : 'hover:bg-white dark:hover:bg-slate-700 hover:text-red-500'}`} title="Excluir" aria-label="Excluir categoria"><Icons.Trash aria-hidden="true" /></button>
         </div>
       </div>
       
@@ -140,7 +140,7 @@ const CategoryNode: React.FC<{
               style={{ marginLeft: `${(depth + 1) * 0.75 + 1.25}rem` }}
             >
               <div className="flex items-center gap-2 overflow-hidden">
-                <span className="flex-shrink-0 opacity-70"><Icons.File /></span>
+                <span className="flex-shrink-0 opacity-70"><Icons.File aria-hidden="true" /></span>
                 <span className="truncate text-xs text-slate-500 dark:text-slate-400 font-medium group-hover:text-indigo-500 transition-colors">{q.name}</span>
               </div>
               <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
@@ -148,22 +148,25 @@ const CategoryNode: React.FC<{
                   onClick={(e) => { e.stopPropagation(); onDuplicateQuestion(q.id); }}
                   className="p-1 hover:text-emerald-500 transition-colors"
                   title="Duplicar"
+                  aria-label={`Duplicar questão ${q.name}`}
                 >
-                  <Icons.Copy />
+                  <Icons.Copy aria-hidden="true" />
                 </button>
                 <button 
                   onClick={(e) => { e.stopPropagation(); onPreviewQuestion(q); }}
                   className="p-1 hover:text-indigo-600 transition-colors"
                   title="Preview Moodle"
+                  aria-label={`Preview questão ${q.name}`}
                 >
-                  <Icons.Search />
+                  <Icons.Search aria-hidden="true" />
                 </button>
                 <button 
                   onClick={(e) => { e.stopPropagation(); onDeleteQuestion(q.id); }}
                   className="p-1 hover:text-red-500 transition-colors"
                   title="Excluir"
+                  aria-label={`Excluir questão ${q.name}`}
                 >
-                  <Icons.Trash />
+                  <Icons.Trash aria-hidden="true" />
                 </button>
               </div>
             </div>
@@ -177,7 +180,7 @@ const CategoryNode: React.FC<{
 const CategoryTree: React.FC<CategoryTreeProps> = (props) => {
   const rootCategories = props.categories.filter(c => c.parentId === null);
   return (
-    <div className="space-y-0.5">
+    <div className="space-y-0.5" role="tree">
       {rootCategories.map(cat => <CategoryNode key={cat.id} category={cat} categories={props.categories} questions={props.questions} depth={0} {...props} />)}
     </div>
   );

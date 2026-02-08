@@ -1,4 +1,4 @@
-import { Category, Question, QuestionType, QuestionStore, Choice, GIFTValidationError } from '../types';
+import { Category, Question, QuestionType, QuestionStore, Choice, GIFTValidationError } from '../types.ts';
 
 const escapeGiftText = (text: string): string => {
   return text

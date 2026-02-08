@@ -1,6 +1,5 @@
-
-import { QuestionStore, BankRegistry, BankMetadata } from '../types';
-import { APP_REGISTRY_KEY, BANK_STORAGE_PREFIX } from '../constants';
+import { QuestionStore, BankRegistry, BankMetadata } from '../types.ts';
+import { APP_REGISTRY_KEY, BANK_STORAGE_PREFIX } from '../constants.tsx';
 
 export const saveBankData = (bankId: string, data: QuestionStore) => {
   localStorage.setItem(`${BANK_STORAGE_PREFIX}${bankId}`, JSON.stringify(data));

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Icons } from '../constants';
-import { Question, QuestionType } from '../types';
+import { Icons } from '../constants.tsx';
+import { Question, QuestionType } from '../types.ts';
 
 interface BaseModalProps {
   isOpen: boolean;
@@ -66,10 +66,10 @@ export const LaTeXModal: React.FC<{
     <BaseModal isOpen={isOpen} onClose={onClose} maxWidth="max-w-2xl">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-black text-slate-800 dark:text-slate-100 flex items-center gap-2 uppercase tracking-tight">
-          <Icons.Sigma /> Assistente de LaTeX
+          <Icons.Sigma aria-hidden="true" /> Assistente de LaTeX
         </h2>
-        <button onClick={onClose} className="text-slate-400 hover:text-slate-600 p-2 transition-colors">
-          <i className="fas fa-times text-xl"></i>
+        <button onClick={onClose} className="text-slate-400 hover:text-slate-600 p-2 transition-colors" aria-label="Fechar">
+          <i className="fas fa-times text-xl" aria-hidden="true"></i>
         </button>
       </div>
 
@@ -81,16 +81,18 @@ export const LaTeXModal: React.FC<{
               type="button"
               onClick={() => insertSnippet(s.code)}
               className="flex flex-col items-center justify-center p-2 rounded-xl border border-slate-100 dark:border-slate-800 hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all"
+              aria-label={`Inserir snippet ${s.label}`}
             >
-              <span className="text-lg font-bold text-indigo-600 dark:text-indigo-400">{s.icon}</span>
+              <span className="text-lg font-bold text-indigo-600 dark:text-indigo-400" aria-hidden="true">{s.icon}</span>
               <span className="text-[9px] font-black uppercase text-slate-400 mt-1">{s.label}</span>
             </button>
           ))}
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest px-1">Código LaTeX</label>
+          <label htmlFor="latex-input" className="text-[10px] font-black uppercase text-slate-400 tracking-widest px-1">Código LaTeX</label>
           <textarea 
+            id="latex-input"
             autoFocus
             value={latex}
             onChange={(e) => setLatex(e.target.value)}
@@ -161,10 +163,10 @@ export const PreviewModal: React.FC<{
     <BaseModal isOpen={isOpen} onClose={onClose} maxWidth="max-w-4xl">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-black text-slate-800 dark:text-slate-100 flex items-center gap-2 uppercase tracking-tight">
-          <Icons.Search /> Simulador Moodle
+          <Icons.Search aria-hidden="true" /> Simulador Moodle
         </h2>
-        <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-2 transition-colors">
-          <i className="fas fa-times text-xl"></i>
+        <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-2 transition-colors" aria-label="Fechar simulador">
+          <i className="fas fa-times text-xl" aria-hidden="true"></i>
         </button>
       </div>
 
@@ -185,8 +187,8 @@ export const PreviewModal: React.FC<{
                 {isCorrect ? 'Nota 1,00' : 'Nota 0,00'}
               </div>
             )}
-            <button className="text-[10px] font-bold uppercase flex items-center gap-1 text-slate-400 hover:text-indigo-500 transition-colors pt-2">
-              <i className="fas fa-flag"></i> Marcar questão
+            <button className="text-[10px] font-bold uppercase flex items-center gap-1 text-slate-400 hover:text-indigo-500 transition-colors pt-2" aria-label="Marcar questão">
+              <i className="fas fa-flag" aria-hidden="true"></i> Marcar questão
             </button>
           </div>
 
@@ -200,7 +202,7 @@ export const PreviewModal: React.FC<{
               {question.type === QuestionType.MULTIPLE_CHOICE ? (
                 <>
                   <p className="text-sm font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">Escolha uma opção:</p>
-                  <div className="space-y-3 pl-1">
+                  <div className="space-y-3 pl-1" role="radiogroup">
                     {question.choices.map((choice, idx) => {
                       const isThisSelected = selectedChoiceId === choice.id;
                       let choiceClasses = "flex items-start gap-4 p-3 rounded-xl transition-all border border-transparent ";
@@ -220,6 +222,8 @@ export const PreviewModal: React.FC<{
                           key={choice.id} 
                           className={choiceClasses}
                           onClick={() => !isSubmitted && setSelectedChoiceId(choice.id)}
+                          role="radio"
+                          aria-checked={isThisSelected}
                         >
                           <div className="flex items-center h-5 mt-0.5">
                             <input 
@@ -232,13 +236,13 @@ export const PreviewModal: React.FC<{
                             />
                           </div>
                           <div className="flex items-baseline gap-3 flex-1 min-w-0">
-                            <span className="text-xs font-black text-slate-400 font-mono mt-0.5">{String.fromCharCode(97 + idx)}.</span>
+                            <span className="text-xs font-black text-slate-400 font-mono mt-0.5" aria-hidden="true">{String.fromCharCode(97 + idx)}.</span>
                             <div 
                               className="text-sm text-slate-700 dark:text-slate-300 flex-1 break-words"
                               dangerouslySetInnerHTML={{ __html: choice.text }}
                             />
                             {isSubmitted && isThisSelected && (
-                              <span className={`text-lg ${isCorrect ? 'text-emerald-500' : 'text-red-500'}`}>
+                              <span className={`text-lg ${isCorrect ? 'text-emerald-500' : 'text-red-500'}`} aria-hidden="true">
                                 <i className={`fas fa-${isCorrect ? 'check-circle' : 'times-circle'}`}></i>
                               </span>
                             )}
@@ -255,6 +259,7 @@ export const PreviewModal: React.FC<{
                     value={essayContent}
                     onChange={(e) => setEssayContent(e.target.value)}
                     disabled={isSubmitted}
+                    aria-label="Resposta dissertativa"
                     className="w-full h-40 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-sm shadow-inner"
                     placeholder="Digite sua resposta aqui..."
                   />
@@ -294,9 +299,9 @@ export const PreviewModal: React.FC<{
             </div>
 
             {isSubmitted && (
-              <div className={`p-5 rounded-xl border animate-in slide-in-from-top-2 duration-300 ${isCorrect ? 'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800' : 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800'}`}>
+              <div className={`p-5 rounded-xl border animate-in slide-in-from-top-2 duration-300 ${isCorrect ? 'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800' : 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800'}`} role="alert">
                 <p className={`font-black text-sm uppercase tracking-tight flex items-center gap-2 ${isCorrect ? 'text-emerald-700 dark:text-emerald-400' : 'text-red-700 dark:text-red-400'}`}>
-                   {isCorrect ? <><i className="fas fa-check"></i> Sua resposta está correta.</> : <><i className="fas fa-times"></i> Sua resposta está incorreta.</>}
+                   {isCorrect ? <><i className="fas fa-check" aria-hidden="true"></i> Sua resposta está correta.</> : <><i className="fas fa-times" aria-hidden="true"></i> Sua resposta está incorreta.</>}
                 </p>
                 {question.type === QuestionType.MULTIPLE_CHOICE && !isCorrect && (
                   <p className="text-xs mt-2 font-bold text-slate-600 dark:text-slate-400">
@@ -338,13 +343,13 @@ export const ConfirmModal: React.FC<{
   isOpen: boolean; title: string; message: string; confirmLabel: string; onConfirm: () => void; onClose: () => void; isDestructive?: boolean;
 }> = ({ isOpen, title, message, confirmLabel, onConfirm, onClose, isDestructive }) => (
   <BaseModal isOpen={isOpen} onClose={onClose}>
-    <div className="text-center space-y-6">
-      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto ${isDestructive ? 'bg-red-50 dark:bg-red-900/20 text-red-500' : 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-500'}`}>
+    <div className="text-center space-y-6" role="alertdialog" aria-labelledby="confirm-title" aria-describedby="confirm-msg">
+      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto ${isDestructive ? 'bg-red-50 dark:bg-red-900/20 text-red-500' : 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-500'}`} aria-hidden="true">
         <i className={`fas fa-${isDestructive ? 'exclamation-triangle' : 'question-circle'} text-2xl`}></i>
       </div>
       <div className="space-y-2">
-        <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight">{title}</h3>
-        <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">{message}</p>
+        <h3 id="confirm-title" className="text-2xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight">{title}</h3>
+        <p id="confirm-msg" className="text-slate-500 dark:text-slate-400 text-sm font-medium">{message}</p>
       </div>
       <div className="flex flex-col gap-2 pt-4">
         <button onClick={onConfirm} className={`w-full py-4 rounded-xl font-black text-xs uppercase tracking-widest text-white shadow-lg transition-all active:scale-95 ${isDestructive ? 'bg-red-600 hover:bg-red-700 shadow-red-500/10' : 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-500/10'}`}>
@@ -362,16 +367,16 @@ export const CategoryModal: React.FC<{
   isOpen: boolean; mode: 'add' | 'edit'; name: string; setName: (name: string) => void; onSubmit: (e: React.FormEvent) => void; onClose: () => void;
 }> = ({ isOpen, mode, name, setName, onSubmit, onClose }) => (
   <BaseModal isOpen={isOpen} onClose={onClose}>
-    <div className="flex items-center justify-between mb-8">
-      <h2 className="text-2xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight">
+    <div className="flex items-center justify-between mb-8" role="dialog" aria-labelledby="cat-modal-title">
+      <h2 id="cat-modal-title" className="text-2xl font-black text-slate-800 dark:text-slate-100 uppercase tracking-tight">
         {mode === 'add' ? 'Nova Categoria' : 'Editar Categoria'}
       </h2>
-      <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-2"><i className="fas fa-times text-xl"></i></button>
+      <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-2" aria-label="Fechar"><i className="fas fa-times text-xl" aria-hidden="true"></i></button>
     </div>
     <form onSubmit={onSubmit} className="space-y-8">
       <div className="space-y-2">
-        <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Nome da Categoria</label>
-        <input autoFocus value={name} onChange={(e) => setName(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 outline-none text-slate-900 dark:text-slate-100 text-lg font-bold focus:ring-2 focus:ring-indigo-500 transition-all shadow-sm" required />
+        <label htmlFor="cat-name-input" className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Nome da Categoria</label>
+        <input id="cat-name-input" autoFocus value={name} onChange={(e) => setName(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 outline-none text-slate-900 dark:text-slate-100 text-lg font-bold focus:ring-2 focus:ring-indigo-500 transition-all shadow-sm" required />
       </div>
       <div className="flex gap-3 justify-end pt-4">
         <button type="button" onClick={onClose} className="px-6 py-3 font-black text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition">Cancelar</button>

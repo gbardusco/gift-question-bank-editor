@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { QuestionStore, Category, Question, BankRegistry, BankMetadata } from '../types';
-import { loadRegistry, saveRegistry, loadBankData, saveBankData, deleteBankData } from '../services/storageService';
+import { QuestionStore, Category, Question, BankRegistry, BankMetadata } from '../types.ts';
+import { loadRegistry, saveRegistry, loadBankData, saveBankData, deleteBankData } from '../services/storageService.ts';
 
 export const useQuestionStore = () => {
   const [registry, setRegistry] = useState<BankRegistry>(loadRegistry());

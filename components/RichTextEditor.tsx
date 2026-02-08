@@ -8,8 +8,8 @@ import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import Image from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
-import { Icons } from '../constants';
-import { LaTeXModal } from './Modals';
+import { Icons } from '../constants.tsx';
+import { LaTeXModal } from './Modals.tsx';
 
 interface RichTextEditorProps {
   value: string;

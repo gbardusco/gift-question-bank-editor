@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from 'react';
-import { Theme } from '../types';
+import { Theme } from '../types.ts';
 
 export const useTheme = () => {
   const [theme, setTheme] = useState<Theme>((localStorage.getItem('theme') as Theme) || 'light');

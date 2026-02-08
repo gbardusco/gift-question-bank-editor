@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
-import { Question, QuestionType, Choice, Category } from '../types';
-import RichTextEditor from './RichTextEditor';
-import { Icons } from '../constants';
+import { Question, QuestionType, Choice, Category } from '../types.ts';
+import RichTextEditor from './RichTextEditor.tsx';
+import { Icons } from '../constants.tsx';
 
 interface QuestionFormProps {
   initialData?: Question;
@@ -79,7 +78,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ initialData, categoryId, ca
     <form onSubmit={handleSubmit} className={`bg-white dark:bg-slate-900 rounded-2xl shadow-xl border p-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 ${isEditMode ? 'border-indigo-200 dark:border-indigo-900/50' : 'border-emerald-200 dark:border-emerald-900/50'}`}>
       <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-6">
         <div className="flex items-center gap-4">
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-lg ${isEditMode ? 'bg-indigo-600 shadow-indigo-200' : 'bg-emerald-600 shadow-emerald-200'}`}>
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-lg ${isEditMode ? 'bg-indigo-600 shadow-indigo-200' : 'bg-emerald-600 shadow-emerald-200'}`} aria-hidden="true">
             {isEditMode ? <Icons.Edit /> : <Icons.Plus />}
           </div>
           <div>
@@ -91,15 +90,16 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ initialData, categoryId, ca
             </p>
           </div>
         </div>
-        <button type="button" onClick={onCancel} className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
-          <i className="fas fa-times text-xl"></i>
+        <button type="button" onClick={onCancel} className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors" aria-label="Fechar formulário">
+          <i className="fas fa-times text-xl" aria-hidden="true"></i>
         </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="flex flex-col gap-2">
-          <label className="text-xs font-black uppercase text-slate-400 tracking-widest">Título da Questão</label>
+          <label htmlFor="q-title" className="text-xs font-black uppercase text-slate-400 tracking-widest">Título da Questão</label>
           <input 
+            id="q-title"
             type="text" 
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -109,8 +109,9 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ initialData, categoryId, ca
           />
         </div>
         <div className="flex flex-col gap-2">
-          <label className="text-xs font-black uppercase text-slate-400 tracking-widest">Tipo de Questão</label>
+          <label htmlFor="q-type" className="text-xs font-black uppercase text-slate-400 tracking-widest">Tipo de Questão</label>
           <select 
+            id="q-type"
             value={type}
             onChange={(e) => setType(e.target.value as QuestionType)}
             className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-xl p-4 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-100 transition-all cursor-pointer"
@@ -120,8 +121,9 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ initialData, categoryId, ca
           </select>
         </div>
         <div className="flex flex-col gap-2">
-          <label className="text-xs font-black uppercase text-slate-400 tracking-widest">Categoria Destino</label>
+          <label htmlFor="q-cat" className="text-xs font-black uppercase text-slate-400 tracking-widest">Categoria Destino</label>
           <select 
+            id="q-cat"
             value={targetCategoryId}
             onChange={(e) => setTargetCategoryId(e.target.value)}
             className="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-xl p-4 focus:ring-2 focus:ring-indigo-500 outline-none text-slate-800 dark:text-slate-100 transition-all cursor-pointer"
@@ -140,15 +142,16 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ initialData, categoryId, ca
       />
 
       {type === QuestionType.MULTIPLE_CHOICE && (
-        <div className="space-y-6 pt-6 border-t border-slate-100 dark:border-slate-800">
+        <section className="space-y-6 pt-6 border-t border-slate-100 dark:border-slate-800" aria-label="Alternativas">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-black text-slate-800 dark:text-slate-200 uppercase tracking-tight">Opções de Resposta</h3>
             <button 
               type="button" 
               onClick={handleAddChoice}
               className="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-4 py-2 rounded-xl text-xs font-black flex items-center gap-2 hover:bg-indigo-100 transition-colors"
+              aria-label="Adicionar nova alternativa"
             >
-              <Icons.Plus /> Adicionar Opção
+              <Icons.Plus aria-hidden="true" /> Adicionar Opção
             </button>
           </div>
           
@@ -162,8 +165,9 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ initialData, categoryId, ca
                     checked={choice.isCorrect}
                     onChange={() => handleCorrectChange(choice.id)}
                     className="w-6 h-6 text-indigo-600 dark:text-indigo-500 border-slate-300 dark:border-slate-600 focus:ring-indigo-500 cursor-pointer"
+                    aria-label={`Marcar alternativa ${index + 1} como correta`}
                   />
-                  <span className={`text-[9px] uppercase font-black tracking-widest ${choice.isCorrect ? 'text-indigo-600' : 'text-slate-400'}`}>
+                  <span className={`text-[9px] uppercase font-black tracking-widest ${choice.isCorrect ? 'text-indigo-600' : 'text-slate-400'}`} aria-hidden="true">
                     {choice.isCorrect ? 'Correta' : 'Falsa'}
                   </span>
                 </div>
@@ -180,13 +184,14 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ initialData, categoryId, ca
                   disabled={choices.length <= 1}
                   className="mt-10 p-2 text-slate-400 hover:text-red-500 disabled:opacity-20 transition-colors"
                   title="Remover opção"
+                  aria-label={`Excluir alternativa ${index + 1}`}
                 >
-                  <Icons.Trash />
+                  <Icons.Trash aria-hidden="true" />
                 </button>
               </div>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
       <div className="flex justify-end gap-4 pt-8 border-t border-slate-100 dark:border-slate-800">
@@ -201,7 +206,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ initialData, categoryId, ca
           type="submit" 
           className={`px-10 py-4 rounded-xl font-black text-white shadow-xl transition-all transform active:scale-95 flex items-center gap-3 uppercase text-xs tracking-widest ${isEditMode ? 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-200 dark:shadow-none' : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-200 dark:shadow-none'}`}
         >
-          <Icons.Save /> {isEditMode ? 'Atualizar Questão' : 'Criar Questão'}
+          <Icons.Save aria-hidden="true" /> {isEditMode ? 'Atualizar Questão' : 'Criar Questão'}
         </button>
       </div>
     </form>

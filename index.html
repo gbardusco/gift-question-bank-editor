@@ -78,9 +78,9 @@
 <script type="importmap">
 {
   "imports": {
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "react": "https://esm.sh/react@^19.2.4",
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
     "@tiptap/react": "https://esm.sh/@tiptap/react@2.11.2",
     "@tiptap/starter-kit": "https://esm.sh/@tiptap/starter-kit@2.11.2",
     "@tiptap/extension-underline": "https://esm.sh/@tiptap/extension-underline@2.11.2",
@@ -89,7 +89,10 @@
     "@tiptap/extension-table-cell": "https://esm.sh/@tiptap/extension-table-cell@2.11.2",
     "@tiptap/extension-table-header": "https://esm.sh/@tiptap/extension-table-header@2.11.2",
     "@tiptap/extension-image": "https://esm.sh/@tiptap/extension-image@2.11.2",
-    "@tiptap/extension-text-align": "https://esm.sh/@tiptap/extension-text-align@2.11.2"
+    "@tiptap/extension-text-align": "https://esm.sh/@tiptap/extension-text-align@2.11.2",
+    "@tiptap/core": "https://esm.sh/@tiptap/core@2.11.2",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
   }
 }
 </script>
@@ -134,8 +137,10 @@
     pointer-events: none;
   }
 </style>
+<link rel="stylesheet" href="/index.css">
 </head>
 <body class="min-h-screen">
     <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>
