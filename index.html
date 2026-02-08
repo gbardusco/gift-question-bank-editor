@@ -1,9 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moodle GIFT Manager</title>
+    
+    <!-- Primário SEO -->
+    <title>Moodle GIFT Manager | Gestão e Exportação de Bancos de Questões</title>
+    <meta name="title" content="Moodle GIFT Manager | Gestão e Exportação de Bancos de Questões">
+    <meta name="description" content="Ferramenta profissional para professores: organize, visualize e exporte questões no formato GIFT para Moodle. Suporte a categorias multinível, LaTeX e editor rico.">
+    <meta name="keywords" content="Moodle, GIFT format, banco de questões, educação a distância, professor, exportação de questões, LaTeX, EAD">
+    <meta name="author" content="Moodle GIFT Manager Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://gift-manager.demo.app/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gift-manager.demo.app/">
+    <meta property="og:title" content="Moodle GIFT Manager | Organize suas questões com perfeição">
+    <meta property="og:description" content="Crie bancos de questões hierárquicos e exporte para o Moodle instantaneamente. Com simulador integrado.">
+    <meta property="og:image" content="https://gift-manager.demo.app/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://gift-manager.demo.app/">
+    <meta property="twitter:title" content="Moodle GIFT Manager">
+    <meta property="twitter:description" content="A ferramenta definitiva para gestão de arquivos GIFT do Moodle.">
+    <meta property="twitter:image" content="https://gift-manager.demo.app/og-image.jpg">
+
+    <!-- Theme & Mobile UI -->
+    <meta name="theme-color" content="#4f46e5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Moodle GIFT Manager",
+      "operatingSystem": "Web",
+      "applicationCategory": "EducationalApplication",
+      "description": "Uma aplicação web para gerenciar, pré-visualizar e exportar questões no formato GIFT para o Moodle.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "BRL"
+      },
+      "featureList": [
+        "Edição de texto rico",
+        "Suporte a LaTeX/KaTeX",
+        "Simulador de interface Moodle",
+        "Categorização multinível",
+        "Exportação compatível com Moodle 5.0"
+      ]
+    }
+    </script>
+
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     <script>
       tailwind.config = {
@@ -47,7 +99,6 @@
   .scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
   .dark .scrollbar-thin::-webkit-scrollbar-thumb { background: #334155; }
   
-  /* TipTap Table Styles */
   .ProseMirror table {
     border-collapse: collapse;
     table-layout: fixed;
@@ -83,10 +134,8 @@
     pointer-events: none;
   }
 </style>
-<link rel="stylesheet" href="/index.css">
 </head>
 <body class="min-h-screen">
     <div id="root"></div>
-<script type="module" src="/index.tsx"></script>
 </body>
 </html>
