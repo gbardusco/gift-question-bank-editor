@@ -1,47 +1,109 @@
-# Moodle GIFT Manager
+# 🎓 Moodle GIFT Manager v2
+> **Do Caos à Clareza Pedagógica:** A ferramenta definitiva para gestão visual de bancos de questões no formato GIFT.
 
-Uma aplicação web profissional e intuitiva projetada para educadores e designers instrucionais gerenciarem bancos de questões no formato GIFT (General Import Format Technology) do Moodle com máxima eficiência.
+![Licença](https://img.shields.io/badge/license-MIT-green)
+![React](https://img.shields.io/badge/React-19-blue)
+![Tailwind](https://img.shields.io/badge/Tailwind-3.4-blueviolet)
 
-## 🚀 Principais Funcionalidades
+---
 
-- **Organização Hierárquica Multinível**: Crie uma árvore complexa de categorias e subcategorias para organizar seus repositórios de questões.
-- **Simulador de Questões Moodle**: Visualize instantaneamente como suas questões aparecerão para os alunos. O simulador mimetiza fielmente o layout, as cores e o comportamento do ambiente Moodle.
-- **Edição Direta e Fluida**:
-  - No Dashboard, basta clicar em qualquer card de questão para entrar no modo de edição.
-  - Interface limpa que prioriza o conteúdo e a velocidade de navegação.
-- **Editor de Texto Rico (WYSIWYG)**: Formate enunciados e alternativas com negrito, itálico, listas e alinhamentos que persistem na exportação.
-- **Sistema de Drag & Drop Inteligente**:
-  - Arraste categorias para reorganizar a hierarquia na barra lateral.
-  - Mova questões entre categorias arrastando os cards do painel central diretamente para as pastas na barra lateral.
-- **Importação e Exportação Poderosas**:
-  - **Importar**: Converta arquivos GIFT existentes em uma estrutura editável instantaneamente.
-  - **Exportar**: Gere arquivos GIFT padronizados do banco completo ou de categorias específicas.
-- **Privacidade Total**: Seus dados são armazenados localmente no navegador (LocalStorage). Nenhuma informação é enviada para servidores externos.
+## 💡 O Pitch: Por que este projeto existe?
 
-## 📖 Como Usar
+Todo professor que utiliza o Moodle conhece a dor de cabeça que é gerenciar o Banco de Questões nativo. A interface é lenta, a organização de categorias é burocrática e editar arquivos **GIFT** (General Import Format Technology) manualmente é um convite ao erro de sintaxe.
 
-### 1. Estrutura de Categorias
-- Utilize o botão **"+ Root"** na barra lateral para criar categorias principais.
-- Use os ícones de ação ao passar o mouse sobre as categorias para adicionar subníveis ou editar.
-- Reorganize sua árvore arrastando uma categoria para dentro de outra.
+O **Moodle GIFT Manager** transforma esse processo técnico e árduo em uma experiência visual e fluida. Ele permite que educadores e designers instrucionais organizem milhares de questões com a facilidade de quem organiza pastas no computador, garantindo que o que você vê no editor é exatamente o que o aluno verá no Moodle.
 
-### 2. Gestão de Questões
-- **Criar**: Clique em "Nova Questão" após selecionar uma categoria.
-- **Editar**: Clique em qualquer card de questão no painel central ou use o ícone de edição.
-- **Mover**: Arraste uma questão do painel central para uma pasta na barra lateral para mudar sua categoria.
+---
 
-### 3. Simulador (Preview)
-- Clique no ícone da **Lupa** (presente tanto nos cards quanto na barra lateral) para abrir o Simulador Moodle.
-- Verifique se a formatação e as opções de múltipla escolha estão corretas antes de importar para o Moodle.
+## 🚀 Diferenciais Exclusivos
 
-### 4. Importar Dados Existentes
-- Clique em **"Importar GIFT"** na base da barra lateral e cole o conteúdo do seu arquivo. O sistema processará as marcas `$CATEGORY` e criará a estrutura automaticamente.
+### 1. Hierarquia Multinível (Drag & Drop)
+Ao contrário de outros editores que geram listas planas, nosso sistema foca na **estrutura**. Arraste categorias para dentro de outras e mova questões entre pastas com um clique. A organização lógica do seu curso começa aqui.
 
-## 🛠 Tecnologias Utilizadas
-- **React 19**: Framework de UI moderno e performante.
-- **Tailwind CSS**: Estilização responsiva com suporte completo a Modo Escuro (Dark Mode).
-- **Lucide/FontAwesome**: Iconografia clara e funcional.
-- **GIFT Parser Customizado**: Lógica robusta para processamento de metadados e categorias.
+### 2. Simulador Fiel ao Moodle
+Chega de importar arquivos para descobrir que uma imagem quebrou ou uma fórmula LaTeX não renderizou. Nosso simulador mimetiza o CSS e o comportamento do Moodle 5.0+, permitindo testes de resposta em tempo real.
 
-## 📄 Licença
-Desenvolvido para a comunidade educacional. Livre para uso, modificação e distribuição.
+### 3. Editor Rich Text com Superpoderes
+Integramos o **Tiptap** (motor do Notion/Mirror) para oferecer:
+- **LaTeX Nativo:** Assistente visual para fórmulas matemáticas complexas.
+- **Limpeza de HTML:** O exportador limpa automaticamente códigos sujos vindos do Word, garantindo uma importação "limpa" no Moodle.
+- **Suporte a Imagens:** Inserção via URL ou Base64.
+
+### 4. Privacidade "Local-First"
+Nenhum dado sai do seu navegador. O banco de dados utiliza o `LocalStorage` e as exportações são processadas inteiramente no lado do cliente. Segurança total para seus exames.
+
+---
+
+## 🛠️ Detalhes Técnicos
+
+A aplicação foi construída com o que há de mais moderno no ecossistema Web:
+
+- **Frontend:** React 19 (Hooks, Context, Memoization para performance em bancos grandes).
+- **Estilização:** Tailwind CSS com suporte completo a **Dark Mode** e design responsivo.
+- **Editor:** Tiptap (Headless Editor) configurado para gerar saída compatível com a engine do Moodle.
+- **Renderização Matemática:** KaTeX para visualização instantânea de fórmulas.
+- **Persistência:** Sistema de Registro de Bancos múltiplo (você pode ter vários bancos de questões diferentes no mesmo navegador).
+
+---
+
+## 💻 Guia de Instalação e Desenvolvimento
+
+### Pré-requisitos
+- **Node.js** (v18 ou superior)
+- **NPM** ou **Yarn**
+
+### Passos para rodar localmente
+
+1. **Clonar o repositório:**
+   ```bash
+   git clone https://github.com/gbardusco/gift-question-bank-editor.git
+   cd gift-question-bank-editor
+   ```
+
+2. **Instalar dependências:**
+   ```bash
+   npm install
+   ```
+
+3. **Iniciar servidor de desenvolvimento:**
+   ```bash
+   npm run dev
+   ```
+   *A aplicação estará disponível em `http://localhost:3000`*
+
+4. **Gerar build de produção:**
+   ```bash
+   npm run build
+   ```
+
+---
+
+## 📂 Estrutura do Projeto
+
+```text
+├── components/         # Componentes de UI (Modais, Editor, Árvore)
+├── hooks/              # Lógica de estado (useQuestionStore, useTheme)
+├── services/           # Motores de Exportação, Importação e Storage
+├── constants.tsx       # Configurações globais e ícones
+├── types.ts            # Definições de interfaces TypeScript
+├── App.tsx             # Layout principal e orquestração
+└── index.tsx           # Ponto de entrada da aplicação
+```
+
+---
+
+## 📝 Formato GIFT Suportado
+
+O sistema exporta arquivos `.txt` otimizados para Moodle 5.0, seguindo as regras:
+- `$CATEGORY`: Caminhos automáticos baseados na sua árvore.
+- `::Título::`: Nomes de questões limpos.
+- `[html]`: Enunciados formatados.
+- `=`: Respostas corretas.
+- `~`: Distratores (opções incorretas).
+- `{}`: Blocos de resposta para questões dissertativas.
+
+---
+
+## 🤝 Contribuição
+
+Este é um projeto Open Source focado em melhorar a educação digital. Sinta-se à vontade para abrir issues ou enviar Pull Requests.
